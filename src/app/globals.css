@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fff6f1;
+  --color-blush: #ffe3ee;
+  --color-ink: #3a0f36;
+  --color-ink-soft: #6b3562;
+  --color-plum: #3a0f36;
+  --color-berry: #b8135f;
+  --color-berry-deep: #8e0c49;
+  --color-pink: #ff6fa8;
+  --color-pink-bright: #ff8fbf;
+  --color-mint: #d6f5e6;
+  --color-lilac: #e6ddff;
+  --color-butter: #fff0b8;
+  --color-alert-pink: #ffb8d2;
+
+  --font-heading: "Bricolage Grotesque Variable", ui-rounded, system-ui, sans-serif;
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* one width, one gutter, every screen */
+.page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 36rem;
+  padding-inline: 1.25rem;
+}
+
+html {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  background: var(--color-cream);
+  overflow-x: hidden;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+button { cursor: pointer; font: inherit; color: inherit; }
+button:disabled { cursor: default; opacity: 0.6; }
+
+/* two-tone ring: white inside, plum outside, so it shows on cream and on plum */
+:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 0;
+  box-shadow: 0 0 0 6px var(--color-plum);
+  border-radius: 0.75rem;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.card {
+  background: #fff;
+  border-radius: 1.75rem;
+  box-shadow: 0 6px 24px -12px rgb(58 15 54 / 0.25);
+}
+
+.field {
+  width: 100%;
+  min-height: 3.25rem;
+  border-radius: 1rem;
+  background: var(--color-blush);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: var(--color-ink);
+}
+.field::placeholder { color: var(--color-ink-soft); opacity: 1; }
+
+.btn-primary, .btn-soft, .btn-ghost {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.5rem 1.4rem;
+  font-weight: 700;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+.btn-primary { background: var(--color-berry); color: #fff; }
+.btn-primary:active { transform: scale(0.97); }
+.btn-soft { background: var(--color-blush); color: var(--color-ink); }
+.btn-soft:active { transform: scale(0.97); }
+.btn-ghost { background: transparent; color: var(--color-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* project tint: set --c on the element */
+.tint { background: color-mix(in srgb, var(--c) 20%, white); }
+.chip-bg { background: color-mix(in srgb, var(--c) 45%, white); }
+
+/* ---------- check-off ---------- */
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fall {
+  0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate3d(var(--dx), 70vh, 0) rotate(var(--rot)); opacity: 0; }
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.check { transition: background-color 0.18s ease, border-color 0.18s ease; }
+.check[aria-pressed="true"] { animation: pop 0.38s ease; }
+.check[aria-pressed="true"] .tick { stroke-dasharray: 24; stroke-dashoffset: 24; animation: draw 0.3s 0.08s ease forwards; }
+.row-in { animation: rise 0.3s ease both; }
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+.confetti i {
+  position: absolute; top: 0; left: var(--x); font-style: normal; font-size: var(--s);
+  animation: fall var(--t) ease-in var(--d) forwards; opacity: 0;
+}
+.wiggle { display: inline-block; animation: wiggle 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  .confetti { display: none; }
+  .check[aria-pressed="true"] .tick { stroke-dashoffset: 0; }
+}
+
+/* keyboard selection on the list (only shown once you've touched the keyboard) */
+.kbd .kbd-selected {
+  outline: 3px solid #fff;
+  box-shadow: 0 0 0 6px var(--color-plum);
+  border-radius: 1.25rem;
+}
